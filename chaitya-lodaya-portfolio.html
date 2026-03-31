@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaitya Lodaya — Project & Program Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2ec;
+    --cream: #ede9e0;
+    --accent: #c8603a;
+    --accent2: #3a6bc8;
+    --muted: #7a776f;
+    --border: rgba(15,14,12,0.12);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-right {
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, #3a4a6b 0%, #0f0e0c 70%);
+  }
+  .hero-right-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,0.3) 20px,
+      rgba(255,255,255,0.3) 21px
+    );
+  }
+  .hero-stats {
+    position: relative;
+    z-index: 2;
+    padding: 60px;
+    width: 100%;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(48px, 6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-summary {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 440px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-summary strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .contact-link:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: var(--cream);
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* RIGHT SIDE STATS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat-box {
+    padding: 32px 28px;
+    background: rgba(255,255,255,0.03);
+    transition: background 0.2s;
+  }
+  .stat-box:hover { background: rgba(255,255,255,0.07); }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 44px;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .stat-num span { color: var(--accent); font-style: italic; }
+  .stat-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 0;
+    position: relative;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    margin-bottom: 60px;
+    letter-spacing: -0.02em;
+  }
+  .section-title em { font-style: italic; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  /* EXPERIENCE */
+  .exp-section { background: var(--cream); }
+  .exp-grid { display: flex; flex-direction: column; gap: 0; }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .exp-item.visible { opacity: 1; transform: translateY(0); }
+  .exp-item:first-child { padding-top: 0; }
+  .exp-meta { padding-top: 4px; }
+  .exp-date {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .exp-company {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .exp-location {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .exp-role {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .exp-bullets li {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    padding-left: 20px;
+    position: relative;
+    font-weight: 300;
+  }
+  .exp-bullets li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .exp-bullets li strong { color: var(--ink); font-weight: 500; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .exp-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+  }
+
+  /* IMPACT */
+  .impact-section { background: var(--ink); color: #fff; }
+  .impact-section .section-title { color: #fff; }
+  .impact-section .section-title em { color: rgba(255,255,255,0.35); }
+  .impact-section .section-label { color: var(--accent); }
+  .metrics-masonry {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1px;
+  }
+  .metric-box {
+    padding: 40px 32px;
+    background: var(--ink);
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .metric-box:hover::before { transform: scaleX(1); }
+  .metric-box:hover { background: rgba(255,255,255,0.03); }
+  .metric-big {
+    font-family: var(--serif);
+    font-size: 52px;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .metric-big span { color: var(--accent); font-style: italic; }
+  .metric-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* TOOLS */
+  .tools-section { background: var(--paper); }
+  .tools-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .tools-group { margin-bottom: 40px; }
+  .tools-group:last-child { margin-bottom: 0; }
+  .tools-group-name {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tools-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tool-chip {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--ink);
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .tool-chip:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .skill-bars { display: flex; flex-direction: column; gap: 20px; }
+  .skill-bar-item {}
+  .skill-bar-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .skill-bar-name { font-size: 13px; font-weight: 500; }
+  .skill-bar-pct { font-size: 12px; color: var(--muted); }
+  .skill-bar-track {
+    height: 3px;
+    background: var(--cream);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* CERTS */
+  .certs-section { background: var(--cream); }
+  .certs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .cert-card {
+    padding: 32px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cert-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .cert-card:hover::after { transform: scaleX(1); }
+  .cert-card:hover { transform: translateY(-3px); }
+  .cert-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--paper);
+    font-weight: 500;
+    font-family: var(--serif);
+  }
+  .cert-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
+  .cert-issuer { font-size: 12px; color: var(--muted); }
+
+  /* FOOTER CTA */
+  .footer-cta {
+    background: var(--ink);
+    text-align: center;
+    padding: 100px 60px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, #2a3550 0%, transparent 70%);
+  }
+  .footer-cta-inner { position: relative; z-index: 2; }
+  .footer-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .footer-title em { font-style: italic; color: var(--accent); }
+  .footer-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; }
+  .footer-link {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 28px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 40px;
+    transition: all 0.2s;
+  }
+  .footer-link:hover {
+    background: #fff;
+    color: var(--ink);
+    border-color: #fff;
+  }
+  .footer-link.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .footer-link.primary:hover {
+    background: #b35430;
+    border-color: #b35430;
+    color: #fff;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245, 242, 236, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(15,14,12,0.06);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-left > * {
+    opacity: 0;
+    animation: fadeUp 0.8s forwards;
+  }
+  .hero-left .eyebrow { animation-delay: 0.1s; }
+  .hero-left .hero-name { animation-delay: 0.2s; }
+  .hero-left .hero-summary { animation-delay: 0.3s; }
+  .hero-left .contact-links { animation-delay: 0.4s; }
+  .hero-left .tag-row { animation-delay: 0.5s; }
+  .hero-right { opacity: 0; animation: fadeUp 0.8s forwards 0.4s; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 100px 24px 60px; }
+    .hero-right { padding: 60px 24px; }
+    .hero-stats { padding: 0; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .container { padding: 0 24px; }
+    section { padding: 72px 0; }
+    .exp-item { grid-template-columns: 1fr; gap: 16px; }
+    .metrics-masonry { grid-template-columns: 1fr 1fr; }
+    .tools-layout { grid-template-columns: 1fr; gap: 48px; }
+    .certs-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Chaitya Lodaya</div>
+  <div class="nav-links">
+    <a href="#experience">Experience</a>
+    <a href="#impact">Impact</a>
+    <a href="#tools">Tools</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Project &amp; Program Manager</div>
+    <h1 class="hero-name">Chaitya<br><em>Lodaya</em></h1>
+    <p class="hero-summary">
+      <strong>7+ years</strong> bridging business goals and technical delivery across <strong>SaaS, FinTech &amp; ERP</strong> — keeping stakeholders aligned, teams unblocked, and projects on track. Jacksonville, FL.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:chaityauf@gmail.com" class="contact-link">✉ chaityauf@gmail.com</a>
+      <a href="tel:+13528704334" class="contact-link">✆ +1-352-870-4334</a>
+      <a href="#" class="contact-link">↗ LinkedIn</a>
+      <a href="#" class="contact-link">↗ Portfolio</a>
+    </div>
+    <div class="tag-row">
+      <span class="tag">Agile · Scrum · SAFe</span>
+      <span class="tag">Stakeholder Mgmt</span>
+      <span class="tag">Risk Governance</span>
+      <span class="tag">Cross-functional Delivery</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-pattern"></div>
+    <div class="hero-stats">
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-num">95<span>%</span></div>
+          <div class="stat-desc">On-time, on-budget delivery rate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">$50<span>K</span></div>
+          <div class="stat-desc">Annual client savings delivered</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">30<span>%</span></div>
+          <div class="stat-desc">Faster time-to-market achieved</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">7<span>+</span></div>
+          <div class="stat-desc">Years of end-to-end PM leadership</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">35</div>
+          <div class="stat-desc">Member Agile team coordinated</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">6<span>+</span></div>
+          <div class="stat-desc">Concurrent projects managed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">25<span>%</span></div>
+          <div class="stat-desc">Scope change reduction</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">2.5<span>K</span></div>
+          <div class="stat-desc">Regression tests automated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section class="exp-section" id="experience">
+  <div class="container">
+    <div class="section-label">Experience</div>
+    <h2 class="section-title">Where I've <em>delivered</em></h2>
+    <div class="exp-grid">
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">May 2023 – Sep 2025</div>
+          <div class="exp-company">NavisionTech Inc.</div>
+          <div class="exp-location">Florida, USA</div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-role">Project & Program Manager</div>
+          <ul class="exp-bullets">
+            <li>Drove enterprise <strong>Microsoft ERP and EasyEFT SaaS</strong> payment integrations for SMBs, achieving <strong>95% on-time, on-budget delivery</strong> by translating complex business needs into clear technical requirements.</li>
+            <li>Directed <strong>6+ concurrent projects</strong> across Agile and Waterfall methodologies, improving timelines <strong>30%</strong> and reducing scope changes <strong>25%</strong> through proactive stakeholder engagement and risk frameworks.</li>
+            <li>Managed budgets and resources for <strong>11+ cross-functional team members</strong> across locations, achieving <strong>15% faster release velocity</strong> and saving clients <strong>$40K–$50K annually</strong> in processing fees.</li>
+            <li>Built <strong>Power BI dashboards</strong> and SQL-driven Excel reports with RAID logs, improving payment data transparency and client satisfaction across all stakeholders.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">ERP</span>
+            <span class="exp-tag">SaaS Payments</span>
+            <span class="exp-tag">Agile + Waterfall</span>
+            <span class="exp-tag">Power BI</span>
+            <span class="exp-tag">Jira</span>
+            <span class="exp-tag">Azure DevOps</span>
+            <span class="exp-tag">RAID Logs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">Mar 2022 – Jan 2023</div>
+          <div class="exp-company">AutoReview.AI</div>
+          <div class="exp-location">Florida, USA</div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-role">Project Manager</div>
+          <ul class="exp-bullets">
+            <li>Owned <strong>full PM lifecycle</strong> for an AI-powered SaaS Compliance Platform — scope, planning, estimation, and reporting — reducing <strong>time-to-market by 30%</strong>.</li>
+            <li>Coordinated a <strong>35-member Agile delivery team</strong>, driving daily stand-ups, sprint planning, and retrospectives across UI/UX, QA, and engineering using Confluence and MS Teams.</li>
+            <li>Authored <strong>FRDs and acceptance criteria</strong> in partnership with product and design, improving feature accuracy <strong>25%</strong> and reducing costly rework cycles.</li>
+            <li>Established <strong>KPI dashboards</strong> tracking risks and dependencies, reducing critical incidents <strong>30%</strong> and increasing test coverage by 15%.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">AI SaaS</span>
+            <span class="exp-tag">Compliance</span>
+            <span class="exp-tag">UAT</span>
+            <span class="exp-tag">Sprint Planning</span>
+            <span class="exp-tag">Confluence</span>
+            <span class="exp-tag">MS Project</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">Nov 2017 – Jun 2021</div>
+          <div class="exp-company">Accenture Solutions</div>
+          <div class="exp-location">Maharashtra, India</div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-role">Software QA Analyst</div>
+          <ul class="exp-bullets">
+            <li>Delivered QA for <strong>20+ enterprise projects</strong> across banking and telecom, ensuring GDPR and SDLC compliance and reducing defect leakage <strong>22%</strong>.</li>
+            <li>Automated <strong>2,500+ regression tests</strong> using TOSCA, saving 2+ hours per tester daily and cutting QA cycle times <strong>20%</strong>.</li>
+            <li>Developed <strong>SQL-based data validation frameworks</strong> and test matrices, improving data accuracy <strong>18%</strong> and QA prep efficiency <strong>30%</strong>.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Banking</span>
+            <span class="exp-tag">Telecom</span>
+            <span class="exp-tag">TOSCA</span>
+            <span class="exp-tag">GDPR</span>
+            <span class="exp-tag">SQL</span>
+            <span class="exp-tag">HP-ALM</span>
+            <span class="exp-tag">Jira</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact-section" id="impact">
+  <div class="container">
+    <div class="section-label">Impact</div>
+    <h2 class="section-title">Numbers that <em>speak</em></h2>
+    <div class="metrics-masonry">
+      <div class="metric-box">
+        <div class="metric-big">95<span>%</span></div>
+        <div class="metric-text">On-time, on-budget delivery rate across all programs</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">30<span>%</span></div>
+        <div class="metric-text">Timeline improvement via stakeholder engagement</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">25<span>%</span></div>
+        <div class="metric-text">Reduction in scope changes through risk governance</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">20<span>%</span></div>
+        <div class="metric-text">Fewer project delays via RAID log frameworks</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">$50<span>K</span></div>
+        <div class="metric-text">Annual client savings in processing fees</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">15<span>%</span></div>
+        <div class="metric-text">Faster release velocity through resource planning</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">30<span>%</span></div>
+        <div class="metric-text">Reduction in critical incidents via KPI dashboards</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-big">22<span>%</span></div>
+        <div class="metric-text">Defect leakage reduction across enterprise projects</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section" id="tools">
+  <div class="container">
+    <div class="section-label">Skills &amp; Tools</div>
+    <h2 class="section-title">How I <em>work</em></h2>
+    <div class="tools-layout">
+      <div>
+        <div class="tools-group">
+          <div class="tools-group-name">PM Tools &amp; Platforms</div>
+          <div class="tools-chips">
+            <span class="tool-chip">Jira</span>
+            <span class="tool-chip">Azure DevOps</span>
+            <span class="tool-chip">MS Project</span>
+            <span class="tool-chip">Confluence</span>
+            <span class="tool-chip">Power BI</span>
+            <span class="tool-chip">Smartsheet</span>
+            <span class="tool-chip">Monday.com</span>
+            <span class="tool-chip">Trello</span>
+            <span class="tool-chip">Asana</span>
+            <span class="tool-chip">Wrike</span>
+            <span class="tool-chip">SharePoint</span>
+            <span class="tool-chip">Lucidchart</span>
+          </div>
+        </div>
+        <div class="tools-group">
+          <div class="tools-group-name">Methodologies</div>
+          <div class="tools-chips">
+            <span class="tool-chip">Agile · Scrum</span>
+            <span class="tool-chip">SAFe</span>
+            <span class="tool-chip">Waterfall</span>
+            <span class="tool-chip">Kanban</span>
+            <span class="tool-chip">RAID Logs</span>
+            <span class="tool-chip">RACI · SOW</span>
+            <span class="tool-chip">WBS</span>
+            <span class="tool-chip">BRD · FRD</span>
+            <span class="tool-chip">UAT</span>
+          </div>
+        </div>
+        <div class="tools-group">
+          <div class="tools-group-name">Data &amp; Reporting</div>
+          <div class="tools-chips">
+            <span class="tool-chip">SQL / MySQL</span>
+            <span class="tool-chip">Advanced Excel</span>
+            <span class="tool-chip">Power BI</span>
+            <span class="tool-chip">KPI Dashboards</span>
+            <span class="tool-chip">Gantt Charts</span>
+            <span class="tool-chip">JQL</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="tools-group-name" style="margin-bottom:24px;">Core competencies</div>
+        <div class="skill-bars">
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Stakeholder Communication</span><span class="skill-bar-pct">Expert</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="96%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Project & Program Delivery</span><span class="skill-bar-pct">Expert</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Agile / Scrum Leadership</span><span class="skill-bar-pct">Expert</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="93%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Risk & Issue Management</span><span class="skill-bar-pct">Expert</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="92%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Cross-functional Coordination</span><span class="skill-bar-pct">Expert</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="94%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Data Reporting & KPI Dashboards</span><span class="skill-bar-pct">Advanced</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span class="skill-bar-name">Budget & Resource Planning</span><span class="skill-bar-pct">Advanced</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section class="certs-section" id="education">
+  <div class="container">
+    <div class="section-label">Education &amp; Certifications</div>
+    <h2 class="section-title">Always <em>learning</em></h2>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">UF</div>
+        <div class="cert-name">MS, Electrical & Computer Engineering</div>
+        <div class="cert-issuer">University of Florida · Minor: Project Management · 2021–2023</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">MU</div>
+        <div class="cert-name">BE, Electronics Engineering</div>
+        <div class="cert-issuer">Mumbai University · 2013–2017</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">PM</div>
+        <div class="cert-name">Project Management Principles & Practices</div>
+        <div class="cert-issuer">UC Irvine Extension</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">SC</div>
+        <div class="cert-name">Certified Scrum Foundations Professional</div>
+        <div class="cert-issuer">CertiProf</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">AT</div>
+        <div class="cert-name">Jira & Confluence Fundamentals</div>
+        <div class="cert-issuer">Atlassian</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">AI</div>
+        <div class="cert-name">Introduction to Generative AI</div>
+        <div class="cert-issuer">Google</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta" id="contact">
+  <div class="footer-cta-inner">
+    <h2 class="footer-title">Let's build something<br><em>great together</em></h2>
+    <p class="footer-sub">Open to project management, program management, and delivery leadership roles across the US.</p>
+    <div class="footer-links">
+      <a href="mailto:chaityauf@gmail.com" class="footer-link primary">Email Chaitya</a>
+      <a href="tel:+13528704334" class="footer-link">+1-352-870-4334</a>
+      <a href="#" class="footer-link">LinkedIn ↗</a>
+      <a href="#" class="footer-link">Portfolio ↗</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll animations for experience items
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 120);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.exp-item').forEach(el => observer.observe(el));
+
+  // Skill bar animations
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skill-bars').forEach(el => barObserver.observe(el));
+</script>
+</body>
+</html>
